@@ -1,7 +1,7 @@
 # deep deterministic policy gradient
 
 ## gym
-
+$$a^2$$
 - constant set:
 ```python
     RENDER_ENV = True
