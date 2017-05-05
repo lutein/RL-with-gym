@@ -72,8 +72,8 @@
 
 在每次训练时，先初始化状态，然后在训练的每次迭代时，要么随机选取一个动作(exploration)，要么选择使得Ｑ值最大的动作。在模拟器中执行动作并观察奖励和状态，将状态转移矩阵存储在经验池中。
 
-如果迭代结束，那么最后y_j就是反馈值，如果没有结束，那么![equation1](http://latex.codecogs.com/gif.latex?y_j)就是
-![equation1](http://latex.codecogs.com/gif.latex?r_j+\gamma\max_{a'}Q(\phi_{j+1},a';\theta))，接着用梯度下降来最小化$(y_j-Q(\phi_j,a_j;\theta))^2$
+如果迭代结束，那么最后y_j就是反馈值，如果没有结束，那么![equation2](http://latex.codecogs.com/gif.latex?y_j)就是
+![equation1](http://latex.codecogs.com/gif.latex?r_j+\gamma\max_{a'}Q(\phi_{j+1},a';\theta))，接着用梯度下降来最小化![equation3](http://latex.codecogs.com/gif.latex?(y_j-Q(\phi_j,a_j;\theta))^2)
 
 相当于课程PPT中讲的那个图：这里的Ｑ可以理解为轨迹？目的是产生使得轨迹尽可能接近的动作。
 
@@ -87,7 +87,7 @@
 
 一共四个子函数：
 
-`add`:输入当前$s,a,r,t$和下一步$s2$，写成矩阵$(s,a,r,t,s2)$,如果此时计数小于缓冲区大小，就将经验矩阵加到缓冲区右侧，并且计数加一；如果计数已经超过缓冲区大小，左出栈，缓冲区附加经验矩阵。
+`add`:输入当前s,a,r,t和下一步s2，写成矩阵(s,a,r,t,s2),如果此时计数小于缓冲区大小，就将经验矩阵加到缓冲区右侧，并且计数加一；如果计数已经超过缓冲区大小，左出栈，缓冲区附加经验矩阵。
 
 `size`:返回计数值（初始为０）
 
@@ -156,11 +156,11 @@
 
 反向传播：调整actor网络参数使得critic的打分尽量高
 
-- \mu (s ; \theta )是actor函数。此处s是输入的state，\theta是网络自己的参数。
+- ![equation1](http://latex.codecogs.com/gif.latex?\mu(s;\theta))是actor函数。此处s是输入的state，![equation1](http://latex.codecogs.com/gif.latex?\theta)是网络自己的参数。
 - Q (s, a ; w)是critic函数。此处s和a是输入的state、action，w是网络自己的参数。
 - 优化目标是让Q (s , a ; w) 尽量高
-- 梯度（被称为policy gradient）是\frac{\partial \mu}{\partial \theta} \frac{\partial Q}{\partial a} ，其实很像是反向传播的chain rule：你可以把\mu看作是a，因为\mu 的输出是action。（这个是deterministic policy gradient，跟传统的不太一样。）
-- 然后用梯度上升更新\theta 。（不是梯度下降，因为我们想让Q尽量大）。
+- 梯度（被称为policy gradient）是![equation1](http://latex.codecogs.com/gif.latex?\frac{\partial \mu}{\partial \theta} \frac{\partial Q}{\partial a})，其实很像是反向传播的chain rule：你可以把![equation1](http://latex.codecogs.com/gif.latex?\mu)看作是a，因为![equation1](http://latex.codecogs.com/gif.latex?\mu)的输出是action。（这个是deterministic policy gradient，跟传统的不太一样。）
+- 然后用梯度上升更新![equation1](http://latex.codecogs.com/gif.latex?\theta)。（不是梯度下降，因为我们想让Q尽量大）。
 
 理解：先随机产生一个状态，并选取一个动作，然后系统返回下一个状态的动作，状态，reward
 
