@@ -2,7 +2,7 @@
 
 ## gym
 
-![equation1](http://latex.codecogs.com/gif.latex?Fib(n))
+![equation1](http://latex.codecogs.com/gif.latex?Fib(n)=\gamma)
 
 - constant set:
 ```python
