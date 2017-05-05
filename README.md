@@ -1,6 +1,11 @@
 # deep deterministic policy gradient
 
 ## gym
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
 $$a^2$$
 - constant set:
 ```python
