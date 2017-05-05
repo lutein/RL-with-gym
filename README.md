@@ -1,9 +1,9 @@
-deep deterministic policy gradient
+#deep deterministic policy gradient
 
-gym
+##gym
 
 - constant set:
-
+```
     RENDER_ENV = True
     # Use Gym Monitor
     GYM_MONITOR_EN = True
@@ -17,28 +17,28 @@ gym
     # Size of replay buffer
     BUFFER_SIZE = 10000
     MINIBATCH_SIZE = 128
-
+```
 - functions:
 
 这里的动作和状态维数应该是常数。
 
 初始动作的产生带有exploration噪声（使用随机的动作）：
-
+```
     a = actor.predict(np.reshape(s, (1, s_dim))) + (1. / (1. + i))
     #reshape(a, newshape, order='C')
-
+```
 而在定义actor.predict时为：
-
+```
     def predict(self, state):
         return self.sess.run(self.out, feed_dict={self.inputs: state})
     #self.out = network.get_actor_out(is_target=False)=self.actor_target_y = self._create_actors(self.state_feature_target)
-
+```
 然后执行动作，获得下一步的状态和奖励：
-
+```
     s2, r, terminal, info = env.step(a[0])
-
+```
 具体代码：
-
+```
     #1. 打开模拟环境
     env = gym.make(ENV_NAME)#ENV_NAME指的是例如："Pendulum-v0","CartPole-v0"之类的给定环境名称
     #2. 初始化
@@ -61,12 +61,12 @@ gym
           env = wrappers.Monitor(env, MONITOR_DIR, force=True)
     if GYM_MONITOR_EN:
        env.monitor.close()
-
-experience replay
+```
+##experience replay
 
 - 伪代码
 
-
+![preview](https://pic1.zhimg.com/c24454f472843ef5caef2733d50aba00_r.png)
 
 - 理解：
 
@@ -86,22 +86,22 @@ experience replay
 
 一共四个子函数：
 
-add:输入当前s,a,r,t和下一步s2，写成矩阵(s,a,r,t,s2),如果此时计数小于缓冲区大小，就将经验矩阵加到缓冲区右侧，并且计数加一；如果计数已经超过缓冲区大小，左出栈，缓冲区附加经验矩阵。
+`add`:输入当前$s,a,r,t$和下一步$s2$，写成矩阵$(s,a,r,t,s2)$,如果此时计数小于缓冲区大小，就将经验矩阵加到缓冲区右侧，并且计数加一；如果计数已经超过缓冲区大小，左出栈，缓冲区附加经验矩阵。
 
-size:返回计数值（初始为０）
+`size`:返回计数值（初始为０）
 
-sample_batch:输入batch_size，如果计数值小于批尺寸，batch就随机选择一组缓冲区和计数值；如果大于批尺寸，就随机选缓冲区和批尺寸。其中的第０，１，２，３，４列分别代表s_batch,a_batch,r_batch,t_batch,s2_batch，最终返回的也是这些值。
+`sample_batch`:输入batch_size，如果计数值小于批尺寸，batch就随机选择一组缓冲区和计数值；如果大于批尺寸，就随机选缓冲区和批尺寸。其中的第０，１，２，３，４列分别代表`s_batch,a_batch,r_batch,t_batch,s2_batch`，最终返回的也是这些值。
 
 关于批尺寸：batch的选择决定的是下降方向。大概指的就是每次训练的数据集大小。
 
 如果数据集较小，可以采用全数据集(Full Batch Learning)，有两个好处：由全数据集确定的方向能更好地代表样本总体，准确地朝向极值所在方向；不同权重梯度值差别大导致的选取全局学习率困难，如果用全数据集的话就可以使用Rprop，只基于梯度符号，针对性单独更新权值。
 
-全数据集的对立面是在线学习(Online Learning)，每次只训练一个样本，batch_size=1
+全数据集的对立面是在线学习(Online Learning)，每次只训练一个样本，`batch_size=1`
 
-clear:　队列和计数值均清零
+`clear`:　队列和计数值均清零
 
 调用：
-
+```
     from replay_buffer import ReplayBuffer
     #in function train(), inputs are constant defined in part 1, 10000, 1234
     replay_buffer = ReplayBuffer(BUFFER_SIZE, RANDOM_SEED)
@@ -113,33 +113,33 @@ clear:　队列和计数值均清零
         s_batch, a_batch, r_batch, t_batch, s2_batch = \
             replay_buffer.sample_batch(MINIBATCH_SIZE)
         #经验池满了之后，可以计算目标Ｑ值了
-
+```
 计算reward, Q_{max}
 
 如何获得q：其中函数critic_target.predict的输入是下一状态，和以此为输入的下一目标动作，输出目标value
-
+```
     target_q = critic_target.predict(s2_batch, actor_target.predict(s2_batch))
-
+```
 然后计算y_i，按照２中的公式：
-
+```
     y_i = []
     for k in range(MINIBATCH_SIZE):
          if t_batch[k]:
              y_i.append(r_batch[k])
          else:
              y_i.append(r_batch[k] + GAMMA * target_q[k])#GAMMA＝0.99, dicsount factor
-
+```
 为了得到最大Ｑ，需要将其放入网络中训练
-
+```
     predicted_q_value, _ = critic.train(s_batch, a_batch, np.reshape(y_i, (MINIBATCH_SIZE, 1)))
-
+```
 每个episode中最大Ｑ值的平均值：
-
+```
     #ep_ave_max_q += np.amax(predicted_q_value)
     ep_ave_max_q += np.mean(predicted_q_value)
-
-用随机梯度发更新四个网络
-
+```
+用随机梯度法更新四个网络
+```
     # Update the actor policy using the sampled gradient
     a_outs = actor.predict(s_batch)
      grads = critic.action_gradients(s_batch, a_outs)
@@ -148,8 +148,8 @@ clear:　队列和计数值均清零
     # Update target networks
     actor_target.train()
     critic_target.train()
-
-策略梯度
+```
+##策略梯度
 
 - 理论
 
