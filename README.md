@@ -160,7 +160,7 @@
 - Q (s, a ; w)是critic函数。此处s和a是输入的state、action，w是网络自己的参数。
 - 优化目标是让Q (s , a ; w) 尽量高
 - 梯度（被称为policy gradient）是
-![equation](http://latex.codecogs.com/gif.latex?\\frac{\\partial\\mu}{\\partial\\theta}\\frac{\\partial Q}{\\partial a})
+![equation](http://latex.codecogs.com/gif.latex?\frac{\\partial\\mu}{\\partial\\theta}\\frac{\\partial Q}{\\partial a})
 ，其实很像是反向传播的chain rule：你可以把![equation1](http://latex.codecogs.com/gif.latex?\mu)看作是a，因为![equation1](http://latex.codecogs.com/gif.latex?\mu)的输出是action。（这个是deterministic policy gradient，跟传统的不太一样。）
 - 然后用梯度上升更新![equation1](http://latex.codecogs.com/gif.latex?\theta)。（不是梯度下降，因为我们想让Q尽量大）。
 
