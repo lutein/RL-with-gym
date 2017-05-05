@@ -2,7 +2,7 @@
 
 ## gym
 
-![](http://latex.codecogs.com/gif.latex?Fib(n)=\\frac{ \\left(\\phi ^{n} -\\gamma^{n} \\right ) }{\\sqrt{5}})
+![equation1](http://latex.codecogs.com/gif.latex?Fib(n)=\\frac{\\left(\\phi ^{n} -\\gamma^{n} \\right ) }{\\sqrt{5}})
 
 - constant set:
 ```python
