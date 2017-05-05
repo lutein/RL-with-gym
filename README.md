@@ -1,6 +1,6 @@
-#deep deterministic policy gradient
+# deep deterministic policy gradient
 
-##gym
+## gym
 
 - constant set:
 ```
@@ -62,7 +62,7 @@
     if GYM_MONITOR_EN:
        env.monitor.close()
 ```
-##experience replay
+## experience replay
 
 - 伪代码
 
@@ -149,7 +149,7 @@
     actor_target.train()
     critic_target.train()
 ```
-##策略梯度
+## 策略梯度
 
 - 理论
 
@@ -165,7 +165,7 @@
 
 理解：先随机产生一个状态，并选取一个动作，然后系统返回下一个状态的动作，状态，reward
 
-训练整体流程：
+## 训练整体流程：
 
 - 算出actor网络输出关于所有参数的gradient
 - 算出critic网络输出关于a的梯度
