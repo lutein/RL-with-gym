@@ -113,13 +113,13 @@
             replay_buffer.sample_batch(MINIBATCH_SIZE)
         #经验池满了之后，可以计算目标Ｑ值了
 ```
-计算reward, Q_{max}
+计算reward, ![equation2](http://latex.codecogs.com/svg.latex?Q_{max})
 
 如何获得q：其中函数critic_target.predict的输入是下一状态，和以此为输入的下一目标动作，输出目标value
 ```python
     target_q = critic_target.predict(s2_batch, actor_target.predict(s2_batch))
 ```
-然后计算y_i，按照２中的公式：
+然后计算![equation2](http://latex.codecogs.com/svg.latex?y_i)，按照２中的公式：
 ```python
     y_i = []
     for k in range(MINIBATCH_SIZE):
@@ -160,9 +160,9 @@
 - Q (s, a ; w)是critic函数。此处s和a是输入的state、action，w是网络自己的参数。
 - 优化目标是让Q (s , a ; w) 尽量高
 - 梯度（被称为policy gradient）是
-![equation](http://latex.codecogs.com/gif.latex?\frac{\\partial\\mu}{\\partial\\theta}\\frac{\\partial Q}{\\partial a})
-，其实很像是反向传播的chain rule：你可以把![equation1](http://latex.codecogs.com/gif.latex?\mu)看作是a，因为![equation1](http://latex.codecogs.com/gif.latex?\mu)的输出是action。（这个是deterministic policy gradient，跟传统的不太一样。）
-- 然后用梯度上升更新![equation1](http://latex.codecogs.com/gif.latex?\theta)。（不是梯度下降，因为我们想让Q尽量大）。
+![equation](http://latex.codecogs.com/svg.latex?\frac{\partial\mu}{\partial\theta}\frac{\partial Q}{\partial a})
+，其实很像是反向传播的chain rule：你可以把![equation1](http://latex.codecogs.com/svg.latex?\mu)看作是a，因为![equation1](http://latex.codecogs.com/svg.latex?\mu)的输出是action。（这个是deterministic policy gradient，跟传统的不太一样。）
+- 然后用梯度上升更新![equation1](http://latex.codecogs.com/svg.latex?\theta)。（不是梯度下降，因为我们想让Q尽量大）。
 
 理解：先随机产生一个状态，并选取一个动作，然后系统返回下一个状态的动作，状态，reward
 
