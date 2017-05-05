@@ -1,12 +1,15 @@
 # deep deterministic policy gradient
 
 ## gym
-
-<script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
+<html>
+<head>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+</head>
+</html>
 $$a^2$$
+
 - constant set:
 ```python
     RENDER_ENV = True
