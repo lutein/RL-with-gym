@@ -72,8 +72,8 @@
 
 在每次训练时，先初始化状态，然后在训练的每次迭代时，要么随机选取一个动作(exploration)，要么选择使得Ｑ值最大的动作。在模拟器中执行动作并观察奖励和状态，将状态转移矩阵存储在经验池中。
 
-如果迭代结束，那么最后y_j就是反馈值，如果没有结束，那么![equation2](http://latex.codecogs.com/gif.latex?y_j)就是
-![equation1](http://latex.codecogs.com/gif.latex?r_j+\gamma\max_{a'}Q(\phi_{j+1},a';\theta))，接着用梯度下降来最小化![equation3](http://latex.codecogs.com/gif.latex?(y_j-Q(\phi_j,a_j;\theta))^2)
+如果迭代结束，那么最后y_j就是反馈值，如果没有结束，那么![equation2](http://latex.codecogs.com/svg.latex?y_j)就是
+![equation1](http://latex.codecogs.com/svg.latex?r_j+\gamma\max_{a'}Q(\phi_{j+1},a';\theta))，接着用梯度下降来最小化![equation3](http://latex.codecogs.com/svg.latex?(y_j-Q(\phi_j,a_j;\theta))^2)
 
 相当于课程PPT中讲的那个图：这里的Ｑ可以理解为轨迹？目的是产生使得轨迹尽可能接近的动作。
 
@@ -156,7 +156,7 @@
 
 反向传播：调整actor网络参数使得critic的打分尽量高
 
-- ![equation1](http://latex.codecogs.com/gif.latex?\mu(s;\theta))是actor函数。此处s是输入的state，![equation1](http://latex.codecogs.com/gif.latex?\theta)是网络自己的参数。
+- ![equation1](http://latex.codecogs.com/svg.latex?\mu(s;\theta))是actor函数。此处s是输入的state，![equation1](http://latex.codecogs.com/svg.latex?\theta)是网络自己的参数。
 - Q (s, a ; w)是critic函数。此处s和a是输入的state、action，w是网络自己的参数。
 - 优化目标是让Q (s , a ; w) 尽量高
 - 梯度（被称为policy gradient）是
