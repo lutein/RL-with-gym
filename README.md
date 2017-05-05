@@ -1,6 +1,3 @@
-# deep deterministic policy gradient
-
-## gym
 <html>
 <head>
   <script type="text/javascript"
@@ -8,6 +5,9 @@
   </script>
 </head>
 </html>
+# deep deterministic policy gradient
+
+## gym
 $$a^2$$
 
 - constant set:
