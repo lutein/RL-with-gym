@@ -1,13 +1,8 @@
-  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script>
-
-<script type="text/javascript">
-document.write("Hello World!")
-</script>
 # deep deterministic policy gradient
 
 ## gym
-$$a^2$$
+
+![](http://latex.codecogs.com/gif.latex?Fib(n)=\\frac{ \\left(\\phi ^{n} -\\gamma^{n} \\right ) }{\\sqrt{5}})
 
 - constant set:
 ```python
