@@ -1,11 +1,10 @@
 # deep deterministic policy gradient
 
 ## gym
-<img src="http://chart.googleapis.com/chart?cht=tx&chl=\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" style="border:none;">
 
 - constant set:
-```
-    RENDER_ENV = True
+```python
+    RENDER_ENV = True
     # Use Gym Monitor
     GYM_MONITOR_EN = True
     # Gym environment
@@ -24,22 +23,22 @@
 这里的动作和状态维数应该是常数。
 
 初始动作的产生带有exploration噪声（使用随机的动作）：
-```
+```python
     a = actor.predict(np.reshape(s, (1, s_dim))) + (1. / (1. + i))
     #reshape(a, newshape, order='C')
 ```
 而在定义actor.predict时为：
-```
+```python
     def predict(self, state):
         return self.sess.run(self.out, feed_dict={self.inputs: state})
     #self.out = network.get_actor_out(is_target=False)=self.actor_target_y = self._create_actors(self.state_feature_target)
 ```
 然后执行动作，获得下一步的状态和奖励：
-```
+```python
     s2, r, terminal, info = env.step(a[0])
 ```
 具体代码：
-```
+```python
     #1. 打开模拟环境
     env = gym.make(ENV_NAME)#ENV_NAME指的是例如："Pendulum-v0","CartPole-v0"之类的给定环境名称
     #2. 初始化
@@ -102,7 +101,7 @@
 `clear`:　队列和计数值均清零
 
 调用：
-```
+```python
     from replay_buffer import ReplayBuffer
     #in function train(), inputs are constant defined in part 1, 10000, 1234
     replay_buffer = ReplayBuffer(BUFFER_SIZE, RANDOM_SEED)
@@ -118,11 +117,11 @@
 计算reward, Q_{max}
 
 如何获得q：其中函数critic_target.predict的输入是下一状态，和以此为输入的下一目标动作，输出目标value
-```
+```python
     target_q = critic_target.predict(s2_batch, actor_target.predict(s2_batch))
 ```
 然后计算y_i，按照２中的公式：
-```
+```python
     y_i = []
     for k in range(MINIBATCH_SIZE):
          if t_batch[k]:
@@ -131,16 +130,16 @@
              y_i.append(r_batch[k] + GAMMA * target_q[k])#GAMMA＝0.99, dicsount factor
 ```
 为了得到最大Ｑ，需要将其放入网络中训练
-```
+```python
     predicted_q_value, _ = critic.train(s_batch, a_batch, np.reshape(y_i, (MINIBATCH_SIZE, 1)))
 ```
 每个episode中最大Ｑ值的平均值：
-```
+```python
     #ep_ave_max_q += np.amax(predicted_q_value)
     ep_ave_max_q += np.mean(predicted_q_value)
 ```
 用随机梯度法更新四个网络
-```
+```python
     # Update the actor policy using the sampled gradient
     a_outs = actor.predict(s_batch)
      grads = critic.action_gradients(s_batch, a_outs)
