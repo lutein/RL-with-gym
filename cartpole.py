@@ -54,7 +54,7 @@ class DQN():
     self.y_input = tf.placeholder("float",[None])#target Q value
     #将Q_value和action_input向量相乘得到的就是这个动作对应的Q_value。然后用reduce_sum将数据维度压成一维
     Q_action = tf.reduce_sum(tf.mul(self.Q_value,self.action_input),reduction_indices = 1)
-    
+    #y_input是最终网络输出，Q_action是replay buffer里存储的对应Q值
     self.cost = tf.reduce_mean(tf.square(self.y_input - Q_action))
     self.optimizer = tf.train.AdamOptimizer(0.0001).minimize(self.cost)
 
