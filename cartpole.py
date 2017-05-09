@@ -105,6 +105,7 @@ class DQN():
     self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON)/10000
 
   def action(self,state):
+    #return the action which will have the maximum Q
     return np.argmax(self.Q_value.eval(feed_dict = {
       self.state_input:[state]
       })[0])
