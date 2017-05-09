@@ -34,7 +34,7 @@ class DQN():
 
     # Init session
     self.session = tf.InteractiveSession()
-    self.session.run(tf.initialize_all_variables())
+    self.session.run(tf.global_variables_initializer())
 
   def create_Q_network(self):
     # network weights
@@ -137,7 +137,7 @@ def main():
       action = agent.egreedy_action(state) # e-greedy action for train
       next_state,reward,done,_ = env.step(action)
       # Define reward for agent
-      reward_agent = -1 if done else 0.1
+      # reward_agent = -1 if done else 0.1
       agent.perceive(state,action,reward,next_state,done)
       state = next_state
       if done:
