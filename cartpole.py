@@ -68,7 +68,7 @@ class DQN():
     Q_action = tf.reduce_sum(tf.multiply(self.Q_value,self.action_input),reduction_indices = 1)
 
     self.cost = tf.reduce_mean(tf.square(self.y_input - Q_action))
-    tf.summary.histogram('cost function',self.cost)
+    tf.summary.scalar('cost function',self.cost)
     self.optimizer = tf.train.AdamOptimizer(0.0001).minimize(self.cost)
 
   def perceive(self,state,action,reward,next_state,done):
@@ -111,13 +111,13 @@ class DQN():
       self.train_writer.add_run_metadata(run_metadata, 'step%03d' % self.time_step)
       self.train_writer.add_summary(summary, self.time_step)
       print('Adding run metadata for', self.time_step)"""
-    summary, _ = self.session.run([self.merged, self.optimizer], feed_dict = {self.state_input:state_batch,
+    summary, _, cost_value = self.session.run([self.merged, self.optimizer, self.cost], feed_dict = {self.state_input:state_batch,
                                                                                 self.y_input:y_batch,
                                                                                 self.action_input:action_batch})
-
+    tf.summary.scalar('cost function value',cost_value)
     if self.time_step%100 == 1:
       self.train_writer.add_summary(summary, self.time_step)
-    #print 'training time count:',self.time_step
+
 
   def egreedy_action(self,state):
     # output of self.Q_value.eval():[[-2.99488783 -0.5567829 ]]
@@ -174,8 +174,6 @@ def main(_):
       # reward_agent = -1 if done else 0.1
       agent.perceive(state,action,reward,next_state,done)
       state = next_state
-     """ print 'current step:',step
-      print 'replay_buffer_size:',len(agent.replay_buffer)"""
       if done:
         break
 
