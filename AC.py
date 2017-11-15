@@ -46,7 +46,9 @@ def ReadData(csv_dir, img_dir, image_sets , test = None):
 root_dir = '/media/sjtu/831bebd9-c866-4ece-b878-5dbd68e5ca50/sjtu/data/VOC2012/'
 csv_dir = os.path.join(root_dir,'src')
 img_dir = os.path.join(root_dir,'JPEGImages')
-image_sets =  ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat',      'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person',       'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']
+image_sets =  ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat',      \
+              'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person',      \
+               'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']
 imgs = ReadData(csv_dir,img_dir,image_sets, test = None)
 input_transform = transforms.Compose([
     transforms.RandomHorizontalFlip(),
@@ -56,7 +58,8 @@ input_transform = transforms.Compose([
 ])
 
 class Data(data.Dataset):
-    def __init__(self, imgs, image_sets, input_transform = None,                  target_transform = None ,test = None):
+    def __init__(self, imgs, image_sets, input_transform = None,                \
+                 target_transform = None ,test = None):
         self.test = test
         self.input_transform = input_transform
         self.target_transform = target_transform
@@ -75,7 +78,8 @@ class Data(data.Dataset):
     def __len__(self):
         return len(self.imgs)
 
-img_data = Data(imgs, image_sets,  input_transform = input_transform, target_transform=None                , test=None)
+img_data = Data(imgs, image_sets,  input_transform = input_transform, target_transform=None\
+                , test=None)
 print(len(img_data.imgs))
 img_batch = data.DataLoader(img_data, batch_size=1 ,shuffle=True, num_workers = 2)
 
@@ -106,7 +110,8 @@ def roi_pooling(box_img):
     padding = tuple(padding)
     stride = (stride[0], stride[1])
     kernel_size = (kernel_size[0], kernel_size[1])
-    roi_pooling = nn.MaxPool2d(kernel_size=kernel_size, stride=stride,                                 padding = padding, dilation=(1, 1))
+    roi_pooling = nn.MaxPool2d(kernel_size=kernel_size, stride=stride,                                \
+                               padding = padding, dilation=(1, 1))
     return roi_pooling(box_img)
 
 def Cat_State(box_img, img):
@@ -232,7 +237,9 @@ def Sample(box_, box, trigger, Trigger, Steps,img):
     width = box[2] - box[0]
     height = box[3] - box[1]
     area = width * height
-    if area < 20 or box[0] < action_bound[0] or     box[1] < action_bound[1] or box[2] > action_bound[2] or box[3] > action_bound[3]    or height < 15 or width < 15:
+    if area < 20 or box[0] < action_bound[0] or     \
+    box[1] < action_bound[1] or box[2] > action_bound[2] or box[3] > action_bound[3]    \
+    or height < 15 or width < 15:
         box, trigger = Action(box,img).Trigger()
         reward -= Penalty
         box = box.squeeze(0)
